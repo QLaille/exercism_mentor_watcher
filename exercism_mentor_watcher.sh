@@ -21,17 +21,31 @@ function getScriptPath() {
 # Run docker build in a new terminal
 function dockerRun() {
 	getScriptPath
-	command="sudo docker build --build-arg token=$EXERCISM_MENTOR_TOKEN --build-arg trackId=$uuid $dir --no-cache"
+	command="sudo docker build --build-arg token=$token --build-arg trackId=$uuid $dir --no-cache"
 	gnome-terminal -x sh -c "printf \"\e]2;EXERCISM\a\";$command; bash"
 }
 
-while true
-do
-CLIPBOARD=$(xsel)
-	if [[ $CLIPBOARD =~ "exercism download --uuid="[a-zA-Z0-9]+ ]]; then
-		uuid=${CLIPBOARD#"exercism download --uuid="}
-		dockerRun
-		$(xsel -c)
-	fi
-sleep 2
-done
+function watch() {
+	while true
+	do
+	CLIPBOARD=$(xsel)
+		if [[ $CLIPBOARD =~ "exercism download --uuid="[a-zA-Z0-9]+ ]]; then
+			uuid=${CLIPBOARD#"exercism download --uuid="}
+			dockerRun
+			$(xsel -c)
+		fi
+	sleep 2
+	done
+}
+
+if [[ $# -eq 1 ]]
+then
+	token=$1
+elif [[ $# -eq 0 ]]
+then
+	token=$EXERCISM_MENTOR_TOKEN
+else
+	echo "Either pass one argument being the exercism token, or nothing to use EXERCISM_MENTOR_TOKEN from your env"
+	exit 1
+fi
+watch
