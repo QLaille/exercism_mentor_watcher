@@ -21,7 +21,7 @@ function getScriptPath() {
 # Run docker build in a new terminal
 function dockerRun() {
 	getScriptPath
-	command="sudo docker build --build-arg token=$token --build-arg trackId=$uuid $dir --no-cache"
+	command="docker build --build-arg token=$token --build-arg trackId=$uuid $dir --no-cache"
 	gnome-terminal -x sh -c "printf \"\e]2;EXERCISM\a\";$command; bash"
 }
 
