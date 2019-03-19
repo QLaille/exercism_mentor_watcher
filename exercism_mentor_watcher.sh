@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#Assuming the dockerfile is in the same dir as the script
-#Courtesy of : https://stackoverflow.com/a/630645/7235297
+# Assuming the dockerfile is in the same dir as the script
+# Courtesy of : https://stackoverflow.com/a/630645/7235297
 function getScriptPath() {
 	prg=$0
 
@@ -15,16 +15,16 @@ function getScriptPath() {
 	dir=$(
 	  cd -P -- "$(dirname -- "$prg")" && pwd -P
 	) || exit
-	prg=$dir/$(basename -- "$prg") || exit 
 }
 
 # Run docker build in a new terminal
 function dockerRun() {
 	getScriptPath
-	command="docker build --build-arg token=$token --build-arg trackId=$uuid $dir --no-cache"
+	command="docker build --build-arg token=$token --build-arg trackId=$uuid $dir/exercism_docker_c/ --no-cache"
 	gnome-terminal -x sh -c "printf \"\e]2;EXERCISM\a\";$command; bash"
 }
 
+# Watches the clipboard and matches the string simiral to the one you copy on an exercise
 function watch() {
 	while true
 	do
@@ -38,6 +38,7 @@ function watch() {
 	done
 }
 
+# The argument beign your exercism token
 if [[ $# -eq 1 ]]
 then
 	token=$1
